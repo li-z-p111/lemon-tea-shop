@@ -1221,9 +1221,9 @@ function checkout(){
     body:JSON.stringify({
       token:PUSHPLUS_TOKEN,
       title:'柠家小铺 · 新订单',
-      content:'<h3>订单详情</h3>'+
+      content:'<html><head><meta charset="utf-8"/></head><body><h3>订单详情</h3>'
         cart.map((x,i)=>'<p><b>'+(i+1)+'. '+x.name+'</b><br/>'+x.sweet+' / '+x.ice+' · ¥'+(x.price*x.qty).toFixed(2)+'</p>').join('')+
-        '<hr/><p style="font-size:18px;color:#2d5016"><b>合计：¥'+t.toFixed(2)+'</b></p><p>🕐 '+new Date().toLocaleString()+'</p>',
+        '<hr/><p style="font-size:18px;color:#2d5016"><b>合计：¥'+t.toFixed(2)+'</b></p><p>🕐 '+new Date().toLocaleString()+'</p></body></html>',
       template:'html'
     })
   }).catch(()=>{});
