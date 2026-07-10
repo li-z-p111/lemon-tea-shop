@@ -427,20 +427,29 @@ body {
   font-weight: 600;
   letter-spacing: .5px;
 }
-.feat-new-badge {
-  font-size: 10px;
-  padding: 2px 10px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #fff0e8, #ffe0d0);
-  color: #e0582e;
-  font-weight: 600;
-  letter-spacing: .5px;
+.feat-tab {
+  padding: 6px 14px;
+  border-radius: 22px;
+  font-size: 11.5px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all .2s;
+  background: var(--card);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  white-space: nowrap;
+  transition: all .25s ease;
+  letter-spacing: 1px;
 }
-.feat-new-badge:hover {
-  transform: scale(1.05);
-  box-shadow: 0 2px 8px rgba(224,88,46,.2);
+.feat-tab:hover {
+  background: #f7f5f0;
+  border-color: #d5d2cb;
+}
+.feat-tab.active {
+  background: var(--green-dark);
+  color: #e8f0e2;
+  border-color: var(--green-dark);
+  box-shadow: 0 4px 14px rgba(30,53,14,.18);
+  font-weight: 600;
 }
 .feat-scroll {
   display: flex;
@@ -617,7 +626,7 @@ body {
   opacity: .3;
   transition: all .25s;
 }
-.pcard .heart.liked { opacity: 1; animation: heartPop .5s cubic-bezier(.17,.89,.32,1.49); }
+.pcard .heart.liked { opacity: 1; color: #e74c3c; animation: heartPop .5s cubic-bezier(.17,.89,.32,1.49); }
 
 .pimg {
   width: 56px;
@@ -1075,8 +1084,8 @@ body {
 <div class="feat-wrap" id="featWrap">
   <div class="feat-header">
     <span class="feat-title">推荐专区</span>
-    <span class="feat-badge">为你精选</span>
-    <span class="feat-new-badge" onclick="scrollToNew();event.stopPropagation()">新品上线🎉</span>
+    <span class="feat-tab active" onclick="switchFeatTab(0)">为你推荐</span>
+    <span class="feat-tab" onclick="switchFeatTab(1)">新品尝鲜</span>
   </div>
   <div class="feat-scroll" id="featScroll"></div>
 </div>
@@ -1204,31 +1213,54 @@ const featured=[
   {ci:2,ii:2,tagline:'花青素爆表，喝出好气色'},
 ];
 
+let activeFeatTab=0;
+
+function renderFeatTab(){
+  activeFeatTab===0?renderFeatured():renderNewProducts();
+}
+function switchFeatTab(i){
+  activeFeatTab=i;
+  document.querySelectorAll('.feat-tab').forEach((t,j)=>t.classList.toggle('active',j===i));
+  renderFeatTab();
+}
+
+function featCardHtml(c){
+  return `<div class="feat-card" onclick="openSpec(${c.ci},'${escapeHtml(c.item.n)}')">
+    <div class="feat-img">${c.item.emoji}</div>
+    <div class="feat-info">
+      <div class="feat-name">${c.item.n}</div>
+      <div class="feat-tagline">${c.tagline}</div>
+    </div>
+    <div class="feat-bottom">
+      <div class="feat-price"><span class="yuan">¥</span>${c.item.p}</div>
+      <div class="feat-cta">去尝尝</div>
+    </div>
+  </div>`;
+}
+
 function renderFeatured(){
-  const wrap=document.getElementById('featWrap');
   const scroll=document.getElementById('featScroll');
   const cards=featured.map(f=>{
     const cat=menu[f.ci],item=cat.items[f.ii];
     return {item,ci:f.ci,tagline:f.tagline};
   });
-  scroll.innerHTML=cards.map(c=>`
-    <div class="feat-card" onclick="openSpec(${c.ci},'${escapeHtml(c.item.n)}')">
-      <div class="feat-img">${c.item.emoji}</div>
-      <div class="feat-info">
-        <div class="feat-name">${c.item.n}</div>
-        <div class="feat-tagline">${c.tagline}</div>
-      </div>
-      <div class="feat-bottom">
-        <div class="feat-price"><span class="yuan">¥</span>${c.item.p}</div>
-        <div class="feat-cta">去尝尝</div>
-      </div>
-    </div>
-  `).join('');
+  scroll.innerHTML=cards.map(featCardHtml).join('');
+}
+
+function renderNewProducts(){
+  const scroll=document.getElementById('featScroll');
+  const newItems=[];
+  menu.forEach((c,ci)=>{
+    c.items.forEach((item,ii)=>{
+      if(item.t==='new') newItems.push({item,ci,tagline:item.sd||item.d});
+    });
+  });
+  scroll.innerHTML=newItems.map(featCardHtml).join('');
 }
 
 function renderAll(){
   document.getElementById('cats').innerHTML=menu.map((c,i)=>`<span class="ct ${i===activeCat?'active':''}" onclick="switchCat(${i})">${c.cat}</span>`).join('');
-  renderFeatured();
+  renderFeatTab();
 
   let html='';
   const sellCopy={0:'🥛 炭火慢烤，茶浓奶滑，治愈你的下午',1:'🍋 每杯爆打 30 次，维C炸弹一口回魂',2:'🍇 鲜果撞鲜柠，双倍果香，清爽不腻',3:'🥭 当季鲜果现榨，纯天然无添加'};
@@ -1435,14 +1467,6 @@ function scrollToProduct(ci,ii){
     setTimeout(()=>flashAndScroll(ci,ii),180);
   }else{
     flashAndScroll(ci,ii);
-  }
-}
-
-function scrollToNew(){
-  for(let ci=0;ci<menu.length;ci++){
-    for(let ii=0;ii<menu[ci].items.length;ii++){
-      if(menu[ci].items[ii].t==='new'){scrollToProduct(ci,ii);return}
-    }
   }
 }
 
