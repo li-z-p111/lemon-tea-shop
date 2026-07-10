@@ -334,7 +334,7 @@ body {
   align-items: center;
   justify-content: center;
 }
-.fav-btn.liked { animation: heartPop .5s cubic-bezier(.17,.89,.32,1.49); }
+.fav-btn.liked { color: #e74c3c; animation: heartPop .5s cubic-bezier(.17,.89,.32,1.49); }
 @keyframes heartPop {
   0%,100% { transform:scale(1); }
   30% { transform:scale(1.25); }
@@ -426,6 +426,21 @@ body {
   color: #b8783e;
   font-weight: 600;
   letter-spacing: .5px;
+}
+.feat-new-badge {
+  font-size: 10px;
+  padding: 2px 10px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #fff0e8, #ffe0d0);
+  color: #e0582e;
+  font-weight: 600;
+  letter-spacing: .5px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.feat-new-badge:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(224,88,46,.2);
 }
 .feat-scroll {
   display: flex;
@@ -1061,6 +1076,7 @@ body {
   <div class="feat-header">
     <span class="feat-title">推荐专区</span>
     <span class="feat-badge">为你精选</span>
+    <span class="feat-new-badge" onclick="scrollToNew();event.stopPropagation()">新品上线🎉</span>
   </div>
   <div class="feat-scroll" id="featScroll"></div>
 </div>
@@ -1180,8 +1196,11 @@ let activeCat=0,cart=[],specItem=null,specSweet=0,specIce=0;
 const BGC=['#eef4ea','#f2f0ea','#eef2f4','#f4efe6','#f2eef2','#eaf0ee','#f0efe8','#f2f2ed'];
 
 const featured=[
+  {ci:1,ii:0,tagline:'¥5 畅饮，解渴入门首选'},
   {ci:1,ii:4,tagline:'兰花香勾魂，喝过就回不去'},
+  {ci:0,ii:1,tagline:'焦香炭烤，奶茶界清流'},
   {ci:3,ii:5,tagline:'一口到热带，比奶茶还上瘾'},
+  {ci:3,ii:0,tagline:'维C+益生菌，越喝越健康'},
   {ci:2,ii:2,tagline:'花青素爆表，喝出好气色'},
 ];
 
@@ -1416,6 +1435,14 @@ function scrollToProduct(ci,ii){
     setTimeout(()=>flashAndScroll(ci,ii),180);
   }else{
     flashAndScroll(ci,ii);
+  }
+}
+
+function scrollToNew(){
+  for(let ci=0;ci<menu.length;ci++){
+    for(let ii=0;ii<menu[ci].items.length;ii++){
+      if(menu[ci].items[ii].t==='new'){scrollToProduct(ci,ii);return}
+    }
   }
 }
 
