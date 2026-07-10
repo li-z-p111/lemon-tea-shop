@@ -458,7 +458,7 @@ body {
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
-  min-height: 170px;
+  min-height: 200px;
 }
 .feat-scroll::-webkit-scrollbar { display: none; }
 .feat-card {
@@ -1253,7 +1253,7 @@ function renderNewProducts(){
   const newItems=[];
   menu.forEach((c,ci)=>{
     c.items.forEach((item,ii)=>{
-      if(item.t==='new') newItems.push({item,ci,tagline:item.sd||item.d});
+      if(item.t==='new') newItems.push({item,ci,tagline:item.d});
     });
   });
   scroll.innerHTML=newItems.map(featCardHtml).join('');
