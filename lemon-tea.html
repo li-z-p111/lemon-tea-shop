@@ -91,6 +91,18 @@ body {
   max-width: 260px;
   white-space: pre-line;
 }
+.hero-pill {
+  display: inline-block;
+  padding: 5px 16px;
+  border-radius: 20px;
+  background: rgba(255,255,255,.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  font-size: 11px;
+  color: var(--text-secondary);
+  letter-spacing: 1px;
+  border: 1px solid rgba(0,0,0,.04);
+}
 .hero-badges {
   display: flex;
   gap: 12px;
@@ -542,6 +554,13 @@ body {
   font-weight: 400;
   letter-spacing: 1px;
 }
+.ptitle-sell {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-weight: 400;
+  letter-spacing: .5px;
+  opacity: .7;
+}
 
 .pgrid {
   display: flex;
@@ -952,6 +971,20 @@ body {
 
 .bottom-pad { height: 90px; }
 
+/* ── Trust Bar ── */
+.trust-bar {
+  margin: 8px 14px 0;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, #eef4ea 0%, #e2ecd8 100%);
+  text-align: center;
+  font-size: 11px;
+  color: var(--green-dark);
+  letter-spacing: 1px;
+  font-weight: 500;
+  border: 1px solid rgba(45,80,22,.06);
+}
+
 .modal-sheet::-webkit-scrollbar { width:3px; }
 .modal-sheet::-webkit-scrollbar-thumb { background:#d8d5ce; border-radius:3px; }
 
@@ -985,6 +1018,7 @@ body {
     <div class="hero-slogan">一颗柠檬 · 三十次暴打 · 一口回魂</div>
     <div class="hero-intro">三年前，我们在街角开张
 只为一杯好柠檬，爆打三十次，每一口都认真</div>
+	    <div class="hero-pill">💡 新鲜手打 · 维C满满 · 5 元起</div>
     <div class="hero-badges">🧊 手工现做 · 🍋 当日鲜柠 · 🚀 即点即送</div>
   </div>
   <div class="hero-stats">累计售出 12,600+ 杯 · 回头率 89%</div>
@@ -1061,6 +1095,8 @@ body {
     </div>
   </div>
 </div>
+
+<div class="trust-bar">🛵 鲜柠现打 · 即点即做 · 每一口都认真</div>
 
 <div class="bar">
   <div class="badge-wrap" onclick="openCart()">
@@ -1146,9 +1182,9 @@ let activeCat=0,cart=[],specItem=null,specSweet=0,specIce=0;
 const BGC=['#eef4ea','#f2f0ea','#eef2f4','#f4efe6','#f2eef2','#eaf0ee','#f0efe8','#f2f2ed'];
 
 const featured=[
-  {ci:1,ii:4,tagline:'老客复购TOP1 · 兰花香勾魂'},
-  {ci:3,ii:5,tagline:'海岛风味天花板 · 一口到热带'},
-  {ci:2,ii:2,tagline:'花青素爆表 · 喝出好气色'},
+  {ci:1,ii:4,tagline:'兰花香勾魂，喝过就回不去'},
+  {ci:3,ii:5,tagline:'一口到热带，比奶茶还上瘾'},
+  {ci:2,ii:2,tagline:'花青素爆表，喝出好气色'},
 ];
 
 function renderFeatured(){
@@ -1177,10 +1213,11 @@ function renderAll(){
   document.getElementById('cats').innerHTML=menu.map((c,i)=>`<span class="ct ${i===activeCat?'active':''}" onclick="switchCat(${i})">${c.cat}</span>`).join('');
   renderFeatured();
 
+  const sellCopy={0:'🥛 炭火慢烤，茶浓奶滑，治愈你的下午',1:'🍋 每杯爆打 30 次，维C炸弹一口回魂',2:'🍇 鲜果撞鲜柠，双倍果香，清爽不腻',3:'🥭 当季鲜果现榨，纯天然无添加'};
   let html='';
   menu.forEach((c,ci)=>{
     html+=`<div id="cat-${ci}" style="display:${ci===activeCat?'block':'none'}">`;
-    html+=`<div class="ptitle">${c.cat}<span class="count">${c.items.length} 款</span></div>`;
+    html+=`<div class="ptitle">${c.cat}<span class="count">${c.items.length} 款</span><span class="ptitle-sell">${sellCopy[ci]}</span></div>`;
     html+=`<div class="pgrid">`;
     c.items.forEach((item,ii)=>{
       const bg=BGC[(ci*7+ii)%BGC.length];
