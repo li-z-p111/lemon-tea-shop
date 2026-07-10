@@ -1049,6 +1049,7 @@ body {
 </div>
 
 <script>
+const PUSHPLUS_TOKEN='6bbe32ec284b40d3a8e35bb5da15c3e8';
 const menu=[{
   cat:'经典奶茶',
   items:[
@@ -1212,6 +1213,21 @@ function checkout(){
   if(cart.length===0){showToast('购物车是空的');return}
   const t=cartTotal();
   showToast('下单成功，共 ¥'+t.toFixed(2));
+
+  // PushPlus 微信通知
+  fetch('https://www.pushplus.plus/send',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      token:PUSHPLUS_TOKEN,
+      title:'柠家小铺 · 新订单',
+      content:'<h3>订单详情</h3>'+
+        cart.map((x,i)=>'<p><b>'+(i+1)+'. '+x.name+'</b><br/>'+x.sweet+' / '+x.ice+' · ¥'+(x.price*x.qty).toFixed(2)+'</p>').join('')+
+        '<hr/><p style="font-size:18px;color:#2d5016"><b>合计：¥'+t.toFixed(2)+'</b></p><p>🕐 '+new Date().toLocaleString()+'</p>',
+      template:'html'
+    })
+  }).catch(()=>{});
+
   cart=[];updateCartUI();closeCart();
 }
 
