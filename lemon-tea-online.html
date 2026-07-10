@@ -52,13 +52,13 @@ body {
   position: relative;
 }
 .hero-brand {
-  flex: 0 0 36%;
+  flex: 0 0 38%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  gap: 8px;
-  padding: 0 20px 12px;
+  gap: 10px;
+  padding: 0 20px 16px;
   z-index: 1;
 }
 .hero-name {
@@ -871,14 +871,14 @@ body {
   font-weight: 700;
   cursor: pointer;
   background: var(--green-dark);
-  color: #e8f0e2;
-  letter-spacing: 2px;
-  transition: all .25s ease;
-}
 .btn-checkout:hover {
   box-shadow: var(--shadow-glow);
   transform: translateY(-1px);
   opacity: .95;
+}
+  color: #e8f0e2;
+  letter-spacing: 2px;
+  transition: all .25s ease;
 }
 .btn-checkout:active { transform:scale(.975); opacity:.9; }
 
@@ -956,59 +956,23 @@ body {
 .modal-sheet::-webkit-scrollbar-thumb { background:#d8d5ce; border-radius:3px; }
 
 /* ── Payment Modal ── */
-.pay-amount {
-  text-align: center;
-  padding: 10px 0 16px;
-}
-.pay-amount .label {
-  font-size: 13px;
-  color: var(--text-secondary);
-  letter-spacing: 1px;
-}
+.pay-amount { text-align:center; padding:10px 0 16px; }
+.pay-amount .label { font-size:13px; color:var(--text-secondary); letter-spacing:1px; }
 .pay-amount .val {
-  font-family: var(--font-serif);
-  font-size: 40px;
-  font-weight: 700;
-  color: var(--green-dark);
-  line-height: 1.3;
+  font-family:var(--font-serif); font-size:40px; font-weight:700;
+  color:var(--green-dark); line-height:1.3;
 }
 .pay-qr-wrap {
-  background: #fff;
-  border-radius: var(--radius);
-  padding: 18px;
-  text-align: center;
-  margin: 4px 0 12px;
-  border: 1px solid var(--border-light);
+  background:#fff; border-radius:var(--radius); padding:18px;
+  text-align:center; margin:4px 0 12px; border:1px solid var(--border-light);
 }
-.pay-qr-wrap img {
-  width: 200px;
-  height: 200px;
-  object-fit: contain;
-  display: block;
-  margin: 0 auto;
-}
-.pay-qr-tip {
-  font-size: 11px;
-  color: var(--text-secondary);
-  margin-top: 10px;
-  letter-spacing: .5px;
-}
+.pay-qr-wrap img { width:200px; height:200px; object-fit:contain; display:block; margin:0 auto; }
+.pay-qr-tip { font-size:11px; color:var(--text-secondary); margin-top:10px; letter-spacing:.5px; }
 .pay-summary {
-  font-size: 11px;
-  color: var(--text-secondary);
-  padding: 10px 0;
-  border-top: 1px solid var(--border-light);
-  line-height: 1.7;
-  max-height: 120px;
-  overflow-y: auto;
+  font-size:11px; color:var(--text-secondary); padding:10px 0;
+  border-top:1px solid var(--border-light); line-height:1.7; max-height:120px; overflow-y:auto;
 }
-.pay-note {
-  text-align: center;
-  font-size: 10px;
-  color: var(--text-muted);
-  margin-top: 10px;
-  letter-spacing: .5px;
-}
+.pay-note { text-align:center; font-size:10px; color:var(--text-muted); margin-top:10px; letter-spacing:.5px; }
 </style>
 </head>
 <body>
@@ -1121,7 +1085,6 @@ body {
       <div class="val" id="payAmount">¥0.00</div>
     </div>
     <div class="pay-qr-wrap">
-      <!-- 🔴 替换下方 src 为你的微信收款码图片 -->
       <img id="payQR" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23f8f7f4' width='200' height='200' rx='12'/%3E%3Crect x='20' y='20' width='160' height='160' rx='8' fill='none' stroke='%23d0cdc5' stroke-width='2' stroke-dasharray='6,4'/%3E%3Ctext x='100' y='80' text-anchor='middle' fill='%23bfbbb0' font-size='36'%3E📷%3C/text%3E%3Ctext x='100' y='115' text-anchor='middle' fill='%23bfbbb0' font-size='13' font-family='sans-serif'%3E微信收款码%3C/text%3E%3Ctext x='100' y='140' text-anchor='middle' fill='%23d5d2ca' font-size='10' font-family='sans-serif'%3E替换为实际二维码%3C/text%3E%3C/svg%3E" alt="微信收款码">
       <div class="pay-qr-tip">📱 打开微信扫一扫付款</div>
     </div>
@@ -1133,7 +1096,6 @@ body {
 </div>
 
 <script>
-const PUSHPLUS_TOKEN='6bbe32ec284b40d3a8e35bb5da15c3e8';
 const menu=[{
   cat:'经典奶茶',
   items:[
@@ -1190,62 +1152,63 @@ const featured=[
 ];
 
 function renderFeatured(){
-  var scroll=document.getElementById('featScroll');
-  var cards=featured.map(function(f){
-    var cat=menu[f.ci],item=cat.items[f.ii];
-    return {item:item,ci:f.ci,tagline:f.tagline};
+  const wrap=document.getElementById('featWrap');
+  const scroll=document.getElementById('featScroll');
+  const cards=featured.map(f=>{
+    const cat=menu[f.ci],item=cat.items[f.ii];
+    return {item,ci:f.ci,tagline:f.tagline};
   });
-  scroll.innerHTML=cards.map(function(c){
-    return '<div class="feat-card" onclick="openSpec('+c.ci+',\''+escapeHtml(c.item.n)+'\')">'+
-      '<div class="feat-img">'+c.item.emoji+'</div>'+
-      '<div class="feat-info">'+
-        '<div class="feat-name">'+c.item.n+'</div>'+
-        '<div class="feat-tagline">'+c.tagline+'</div>'+
-      '</div>'+
-      '<div class="feat-bottom">'+
-        '<div class="feat-price"><span class="yuan">¥</span>'+c.item.p+'</div>'+
-        '<div class="feat-cta">去尝尝</div>'+
-      '</div>'+
-    '</div>';
-  }).join('');
+  scroll.innerHTML=cards.map(c=>`
+    <div class="feat-card" onclick="openSpec(${c.ci},'${escapeHtml(c.item.n)}')">
+      <div class="feat-img">${c.item.emoji}</div>
+      <div class="feat-info">
+        <div class="feat-name">${c.item.n}</div>
+        <div class="feat-tagline">${c.tagline}</div>
+      </div>
+      <div class="feat-bottom">
+        <div class="feat-price"><span class="yuan">¥</span>${c.item.p}</div>
+        <div class="feat-cta">去尝尝</div>
+      </div>
+    </div>
+  `).join('');
 }
 
 function renderAll(){
-  document.getElementById('cats').innerHTML=menu.map(function(c,i){
-    return '<span class="ct '+(i===activeCat?'active':'')+'" onclick="switchCat('+i+')">'+c.cat+'</span>';
-  }).join('');
+  document.getElementById('cats').innerHTML=menu.map((c,i)=>`<span class="ct ${i===activeCat?'active':''}" onclick="switchCat(${i})">${c.cat}</span>`).join('');
   renderFeatured();
 
-  var html='';
-  menu.forEach(function(c,ci){
-    html+='<div id="cat-'+ci+'" style="display:'+(ci===activeCat?'block':'none')+'">';
-    html+='<div class="ptitle">'+c.cat+'<span class="count">'+c.items.length+' 款</span></div>';
-    html+='<div class="pgrid">';
-    c.items.forEach(function(item,ii){
-      var bg=BGC[(ci*7+ii)%BGC.length];
-      var liked=getLiked(item.n);
-      var tagHtml=item.t?'<span class="ptag pt-'+item.t+'">'+item.tt+'</span>':'';
-      html+='<div class="pcard" id="prod-'+ci+'-'+ii+'" onclick="openSpec('+ci+',\''+escapeHtml(item.n)+'\')">'+
-        '<div class="pimg" style="background:'+bg+'">'+item.emoji+'</div>'+
-        '<div class="pinfo">'+
-          '<div class="pname-row">'+
-            '<span class="pname">'+item.n+'</span>'+
-            tagHtml+
-          '</div>'+
-          '<div class="pdesc">'+item.d+'</div>'+
-        '</div>'+
-        '<div class="pprice"><span class="yuan">¥</span>'+item.p+'</div>'+
-        '<span class="heart '+(liked?'liked':'')+'" onclick="event.stopPropagation();toggleLike(this,\''+escapeHtml(item.n)+'\')">'+(liked?'♥':'♡')+'</span>'+
-      '</div>';
+  let html='';
+  menu.forEach((c,ci)=>{
+    html+=`<div id="cat-${ci}" style="display:${ci===activeCat?'block':'none'}">`;
+    html+=`<div class="ptitle">${c.cat}<span class="count">${c.items.length} 款</span></div>`;
+    html+=`<div class="pgrid">`;
+    c.items.forEach((item,ii)=>{
+      const bg=BGC[(ci*7+ii)%BGC.length];
+      const liked=getLiked(item.n);
+      const tagHtml=item.t?`<span class="ptag pt-${item.t}">${item.tt}</span>`:'';
+      html+=`
+        <div class="pcard" id="prod-${ci}-${ii}" onclick="openSpec(${ci},'${escapeHtml(item.n)}')">
+          <div class="pimg" style="background:${bg}">${item.emoji}</div>
+          <div class="pinfo">
+            <div class="pname-row">
+              <span class="pname">${item.n}</span>
+              ${tagHtml}
+            </div>
+            <div class="pdesc">${item.d}</div>
+          </div>
+          <div class="pprice"><span class="yuan">¥</span>${item.p}</div>
+          <span class="heart ${liked?'liked':''}" onclick="event.stopPropagation();toggleLike(this,'${escapeHtml(item.n)}')">${liked?'♥':'♡'}</span>
+        </div>
+      `;
     });
-    html+='</div></div>';
+    html+=`</div></div>`;
   });
   document.getElementById('plist').innerHTML=html;
 }
 
-function getLiked(name){return localStorage.getItem('like_'+name)==='1';}
+function getLiked(name){return localStorage.getItem('like_'+name)==='1'}
 function toggleLike(el,name){
-  var liked=!getLiked(name);
+  const liked=!getLiked(name);
   localStorage.setItem('like_'+name,liked?'1':'0');
   el.textContent=liked?'♥':'♡';
   if(liked)el.classList.add('liked');else el.classList.remove('liked');
@@ -1253,75 +1216,71 @@ function toggleLike(el,name){
 }
 
 function openSpec(ci,name){
-  var cat=menu[ci],item=cat.items.find(function(i){return i.n===name;});
+  const cat=menu[ci],item=cat.items.find(i=>i.n===name);
   if(!item)return;
   document.getElementById('specModal').classList.add('show');
-  specItem={ci:ci,name:name,item:item};
-  document.getElementById('specProduct').innerHTML='<div class="pimg" style="width:52px;height:52px;font-size:24px;background:linear-gradient(135deg, #eef4ea 0%, #dce8d4 100%)">'+item.emoji+'</div><div><div class="mpname">'+item.n+'</div><div class="mpprice">¥'+item.p+'</div><div class="mpdesc">'+(item.sd||'')+'</div></div>';
+  specItem={ci,name,item};
+  document.getElementById('specProduct').innerHTML=`<div class="pimg" style="width:52px;height:52px;font-size:24px;background:linear-gradient(135deg, #eef4ea 0%, #dce8d4 100%)">${item.emoji}</div><div><div class="mpname">${item.n}</div><div class="mpprice">¥${item.p}</div><div class="mpdesc">${item.sd||''}</div></div>`;
   specSweet=0;specIce=0;
-  document.getElementById('sweetOpts').innerHTML=['正常甜','七分甜','半糖','三分甜','无糖'].map(function(s,i){return '<span class="opt-tag '+(i===0?'active':'')+'" onclick="pickSweet('+i+',this)">'+s+'</span>';}).join('');
-  document.getElementById('iceOpts').innerHTML=['正常冰','少冰','去冰','多冰'].map(function(s,i){return '<span class="opt-tag '+(i===0?'active':'')+'" onclick="pickIce('+i+',this)">'+s+'</span>';}).join('');
+  document.getElementById('sweetOpts').innerHTML=['正常甜','七分甜','半糖','三分甜','无糖'].map((s,i)=>`<span class="opt-tag ${i===0?'active':''}" onclick="pickSweet(${i},this)">${s}</span>`).join('');
+  document.getElementById('iceOpts').innerHTML=['正常冰','少冰','去冰','多冰'].map((s,i)=>`<span class="opt-tag ${i===0?'active':''}" onclick="pickIce(${i},this)">${s}</span>`).join('');
 }
-function pickSweet(i,el){specSweet=i;el.parentElement.querySelectorAll('.opt-tag').forEach(function(t){t.classList.remove('active');});el.classList.add('active');}
-function pickIce(i,el){specIce=i;el.parentElement.querySelectorAll('.opt-tag').forEach(function(t){t.classList.remove('active');});el.classList.add('active');}
-function closeSpec(){document.getElementById('specModal').classList.remove('show');specItem=null;}
+function pickSweet(i,el){specSweet=i;el.parentElement.querySelectorAll('.opt-tag').forEach(t=>t.classList.remove('active'));el.classList.add('active')}
+function pickIce(i,el){specIce=i;el.parentElement.querySelectorAll('.opt-tag').forEach(t=>t.classList.remove('active'));el.classList.add('active')}
+function closeSpec(){document.getElementById('specModal').classList.remove('show');specItem=null}
 
 function confirmAdd(){
   if(!specItem)return;
-  var sweetNames=['正常甜','七分甜','半糖','三分甜','无糖'],iceNames=['正常冰','少冰','去冰','多冰'];
+  const sweetNames=['正常甜','七分甜','半糖','三分甜','无糖'],iceNames=['正常冰','少冰','去冰','多冰'];
   cart.push({name:specItem.name,emoji:specItem.item.emoji,price:specItem.item.p,qty:1,sweet:sweetNames[specSweet],ice:iceNames[specIce]});
   closeSpec();updateCartUI();showToast('已添加 '+specItem.name);
 }
 
-function cartTotal(){return cart.reduce(function(s,c){return s+c.price*c.qty;},0);}
-function cartCount(){return cart.reduce(function(s,c){return s+c.qty;},0);}
+function cartTotal(){return cart.reduce((s,c)=>s+c.price*c.qty,0)}
+function cartCount(){return cart.reduce((s,c)=>s+c.qty,0)}
 
 function updateCartUI(){
-  var c=cartCount(),t=cartTotal();
-  var badge=document.getElementById('cartBadge');
-  if(c>0){badge.style.display='flex';badge.textContent=c;}else{badge.style.display='none';}
+  const c=cartCount(),t=cartTotal();
+  const badge=document.getElementById('cartBadge');
+  if(c>0){badge.style.display='flex';badge.textContent=c}else{badge.style.display='none'}
   document.getElementById('btotal').textContent='¥'+t.toFixed(2);
 
-  var items=document.getElementById('cartItems'),empty=document.getElementById('cartEmpty'),sum=document.getElementById('cartSum'),tp=document.getElementById('cartTotalPrice');
-  if(cart.length===0){items.innerHTML='';empty.style.display='block';sum.style.display='none';}
+  const items=document.getElementById('cartItems'),empty=document.getElementById('cartEmpty'),sum=document.getElementById('cartSum'),tp=document.getElementById('cartTotalPrice');
+  if(cart.length===0){items.innerHTML='';empty.style.display='block';sum.style.display='none'}
   else{empty.style.display='none';sum.style.display='block';tp.textContent='¥'+t.toFixed(2);
-    items.innerHTML=cart.map(function(x,i){
-      return '<div class="cart-item"><div class="ci-icon">'+x.emoji+'</div><div class="ci-info"><div class="ci-name">'+x.name+'</div><div class="ci-spec">'+x.sweet+' / '+x.ice+'</div></div><div class="qty"><button class="qb" onclick="changeQty('+i+',-1)">−</button><span class="qn">'+x.qty+'</span><button class="qb" onclick="changeQty('+i+',1)">+</button></div><div class="ci-price">¥'+(x.price*x.qty).toFixed(2)+'</div></div>';
-    }).join('');
+    items.innerHTML=cart.map((x,i)=>`<div class="cart-item"><div class="ci-icon">${x.emoji}</div><div class="ci-info"><div class="ci-name">${x.name}</div><div class="ci-spec">${x.sweet} / ${x.ice}</div></div><div class="qty"><button class="qb" onclick="changeQty(${i},-1)">−</button><span class="qn">${x.qty}</span><button class="qb" onclick="changeQty(${i},1)">+</button></div><div class="ci-price">¥${(x.price*x.qty).toFixed(2)}</div></div>`).join('');
   }
 }
-function changeQty(i,d){cart[i].qty+=d;if(cart[i].qty<=0)cart.splice(i,1);updateCartUI();}
-function openCart(){document.getElementById('cartModal').classList.add('show');updateCartUI();}
-function closeCart(){document.getElementById('cartModal').classList.remove('show');}
+function changeQty(i,d){cart[i].qty+=d;if(cart[i].qty<=0)cart.splice(i,1);updateCartUI()}
+function openCart(){document.getElementById('cartModal').classList.add('show');updateCartUI()}
+function closeCart(){document.getElementById('cartModal').classList.remove('show')}
 
 function checkout(){
-  if(cart.length===0){showToast('购物车是空的');return;}
-  var t=cartTotal();
-
-  // 打开付款弹窗
-  var orderNo='LT'+Date.now().toString(36).toUpperCase();
+  if(cart.length===0){showToast('购物车是空的');return}
+  const t=cartTotal();
+  const orderNo='LT'+Date.now().toString(36).toUpperCase();
   document.getElementById('payAmount').textContent='¥'+t.toFixed(2);
   document.getElementById('paySummary').innerHTML=
     '<div style="margin-bottom:4px">订单编号：<b>'+orderNo+'</b></div>'+
-    cart.map(function(x,i){
-      return '<div>'+x.emoji+' <b>'+(i+1)+'. '+x.name+'</b> — '+x.sweet+' / '+x.ice+' — ¥'+(x.price*x.qty).toFixed(2)+'</div>';
-    }).join('');
+    cart.map((x,i)=>
+    '<div>'+x.emoji+' <b>'+(i+1)+'. '+x.name+'</b> — '+x.sweet+' / '+x.ice+' — ¥'+(x.price*x.qty).toFixed(2)+'</div>'
+  ).join('');
   document.getElementById('payModal').classList.add('show');
   closeCart();
 
-  // PushPlus 微信通知（异步，不阻塞）
+  // PushPlus 微信通知
   fetch('https://www.pushplus.plus/send',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({
-      token:PUSHPLUS_TOKEN,
+      token:'6bbe32ec284b40d3a8e35bb5da15c3e8',
       title:'柠家小铺 · 新订单',
       content:'<html><head><meta charset="utf-8"/></head><body><h3>订单详情</h3>'+
-        cart.map(function(x,i){return '<p><b>'+(i+1)+'. '+x.name+'</b><br/>'+x.sweet+' / '+x.ice+' · ¥'+(x.price*x.qty).toFixed(2)+'</p>';}).join('')+
+        cart.map((x,i)=>'<p><b>'+(i+1)+'. '+x.name+'</b><br/>'+x.sweet+' / '+x.ice+' · ¥'+(x.price*x.qty).toFixed(2)+'</p>').join('')+
         '<hr/><p style="font-size:18px;color:#2d5016"><b>合计：¥'+t.toFixed(2)+'</b></p><p>🕐 '+new Date().toLocaleString()+'</p></body></html>',
       template:'html'
     })
-  }).catch(function(){});
+  }).catch(()=>{});
 }
 
 function confirmPay(){
@@ -1336,31 +1295,31 @@ function closePay(){
   document.getElementById('payModal').classList.remove('show');
 }
 
-function switchCat(i){activeCat=i;renderAll();setTimeout(function(){var el=document.getElementById('cat-'+i);if(el)el.scrollIntoView({behavior:'smooth'});},50);}
+function switchCat(i){activeCat=i;renderAll();setTimeout(()=>{const el=document.getElementById('cat-'+i);if(el)el.scrollIntoView({behavior:'smooth'})},50)}
 
 function toggleFav(){
-  var btn=document.getElementById('favBtn'),liked=localStorage.getItem('shop_fav')==='1';
+  const btn=document.getElementById('favBtn'),liked=localStorage.getItem('shop_fav')==='1';
   localStorage.setItem('shop_fav',liked?'0':'1');
   btn.textContent=liked?'🤍':'♥';
   if(!liked)btn.classList.add('liked');else btn.classList.remove('liked');
   showToast(liked?'取消收藏':'已收藏店铺');
 }
 
-function showToast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._tid);t._tid=setTimeout(function(){t.classList.remove('show');},1800);}
-function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._tid);t._tid=setTimeout(()=>t.classList.remove('show'),1800)}
+function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 
-var lastScroll=0;
-window.addEventListener('scroll',function(){
-  var hdr=document.getElementById('header'),st=window.scrollY;
+let lastScroll=0;
+window.addEventListener('scroll',()=>{
+  const hdr=document.getElementById('header'),st=window.scrollY;
   if(st>60&&lastScroll<=60)hdr.classList.add('small');
   else if(st<=20&&lastScroll>20)hdr.classList.remove('small');
   lastScroll=st;
 });
 
-document.querySelectorAll('.modal-overlay').forEach(function(m){m.addEventListener('click',function(e){if(e.target===this){this.classList.remove('show');if(this.id==='specModal')specItem=null;}});});
+document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',function(e){if(e.target===this){this.classList.remove('show');if(this.id==='specModal')specItem=null}}));
 
 // Hero display emoji — 2 emojis per product for visual richness
-var heroEmoji={
+const heroEmoji={
   '原味奶茶':'🧋','益禾烤奶':'🔥🥛','珍珠奶茶':'🧋🫧',
   '红豆奶茶':'🫘🥛','椰果奶茶':'🥥✨','脆啵啵奶茶':'💎🧋',
   '烧仙草奶茶':'🌿🫙',
@@ -1370,63 +1329,63 @@ var heroEmoji={
   '芒果柠檬茶':'🥭🍋','桑葚柠檬茶':'🫐🍋','金桔柠檬茶':'🍊🍋',
   '百香果柠檬茶':'💛🍋','百香果金桔柠檬茶':'🍹💛','百香果双响炮':'🎉💥',
   '百香果益力多':'✨🧫','柠檬益力多':'🍋🧫','芒果益力多':'🥭🧫',
-  '西瓜汁':'🍉','芒果汁':'🥭','芒果椰椰':'🥭🥥','西瓜椰椰':'🍉🥥'
+  '西瓜汁':'🍉','芒果汁':'🥭','芒果椰椰':'🥭🥥','西瓜椰椰':'🍉🥥',
 };
-var catGradients=[
+const catGradients=[
   'linear-gradient(135deg, #fdf8f2 0%, #f5ede2 100%)',
   'linear-gradient(135deg, #f4f8f0 0%, #e6f0de 100%)',
   'linear-gradient(135deg, #faf7f0 0%, #f2ece0 100%)',
-  'linear-gradient(135deg, #f8f4fa 0%, #ece0f2 100%)'
+  'linear-gradient(135deg, #f8f4fa 0%, #ece0f2 100%)',
 ];
 
 function populateHeroGrid(){
   // Collect all products, shuffle, pick 9
-  var all=[];
-  menu.forEach(function(c,ci){c.items.forEach(function(item,ii){all.push({ci:ci,ii:ii,item:item});});});
-  for(var i=all.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var tmp=all[i];all[i]=all[j];all[j]=tmp;}
-  var picked=all.slice(0,9);
+  const all=[];
+  menu.forEach((c,ci)=>{c.items.forEach((item,ii)=>{all.push({ci,ii,item})})});
+  for(let i=all.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[all[i],all[j]]=[all[j],all[i]]}
+  const picked=all.slice(0,9);
 
   function cellHtml(p){
-    var bg=catGradients[p.ci]||catGradients[0];
-    var emoji=heroEmoji[p.item.n]||p.item.emoji||'·';
-    return '<div class="grid-cell" style="background:'+bg+'" onclick="scrollToProduct('+p.ci+','+p.ii+')" title="'+p.item.n+' · ¥'+p.item.p+'">'+
-      '<span class="cell-emoji">'+emoji+'</span>'+
-      '<span class="cell-name">'+p.item.n+'</span>'+
-      '<span class="cell-price">¥'+p.item.p+'</span>'+
-    '</div>';
+    const bg=catGradients[p.ci]||catGradients[0];
+    const emoji=heroEmoji[p.item.n]||p.item.emoji||'·';
+    return `<div class="grid-cell" style="background:${bg}" onclick="scrollToProduct(${p.ci},${p.ii})" title="${p.item.n} · ¥${p.item.p}">
+      <span class="cell-emoji">${emoji}</span>
+      <span class="cell-name">${p.item.n}</span>
+      <span class="cell-price">¥${p.item.p}</span>
+    </div>`;
   }
 
   // Distribute 9 items across 3 rows (3 per row)
-  var rows=[[],[],[]];
-  picked.forEach(function(p,i){rows[i%3].push(p);});
+  const rows=[[],[],[]];
+  picked.forEach((p,i)=>rows[i%3].push(p));
 
-  ['track1','track2','track3'].forEach(function(tid,i){
-    var row=rows[i];
+  ['track1','track2','track3'].forEach((tid,i)=>{
+    const row=rows[i];
     // 3 original × 4 copies = 12 cells to fill the track, no gaps
-    var cells=row.concat(row,row,row).map(cellHtml).join('');
+    const cells=[...row,...row,...row,...row].map(cellHtml).join('');
     document.getElementById(tid).innerHTML=cells;
   });
 }
 
 function flashAndScroll(ci,ii){
-  var el=document.getElementById('prod-'+ci+'-'+ii);
+  const el=document.getElementById('prod-'+ci+'-'+ii);
   if(!el)return;
   el.scrollIntoView({behavior:'smooth',block:'center'});
   el.classList.add('flash');
-  setTimeout(function(){el.classList.remove('flash');},700);
+  setTimeout(()=>el.classList.remove('flash'),700);
 }
 
 function scrollToProduct(ci,ii){
   if(activeCat!==ci){
     activeCat=ci;renderAll();
-    setTimeout(function(){flashAndScroll(ci,ii);},180);
+    setTimeout(()=>flashAndScroll(ci,ii),180);
   }else{
     flashAndScroll(ci,ii);
   }
 }
 
 (function init(){
-  var f=localStorage.getItem('shop_fav')==='1';
+  const f=localStorage.getItem('shop_fav')==='1';
   document.getElementById('favBtn').textContent=f?'♥':'🤍';
   if(f)document.getElementById('favBtn').classList.add('liked');
   populateHeroGrid();
