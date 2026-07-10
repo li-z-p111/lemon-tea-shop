@@ -168,8 +168,8 @@ body {
   100% { transform: translateX(0); }
 }
 .grid-cell {
-  width: 95px;
-  height: 95px;
+  width: 115px;
+  height: 115px;
   border-radius: 16px;
   flex-shrink: 0;
   position: relative;
@@ -244,8 +244,17 @@ body {
   left: 50%;
   transform: translateX(-50%);
   z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
   opacity: .5;
   animation: hintPulse 2s ease-in-out infinite;
+}
+.scroll-hint span {
+  font-size: 10px;
+  color: var(--text-secondary);
+  letter-spacing: 2px;
 }
 .scroll-hint svg {
   width: 18px;
@@ -945,6 +954,25 @@ body {
 
 .modal-sheet::-webkit-scrollbar { width:3px; }
 .modal-sheet::-webkit-scrollbar-thumb { background:#d8d5ce; border-radius:3px; }
+
+/* ── Payment Modal ── */
+.pay-amount { text-align:center; padding:10px 0 16px; }
+.pay-amount .label { font-size:13px; color:var(--text-secondary); letter-spacing:1px; }
+.pay-amount .val {
+  font-family:var(--font-serif); font-size:40px; font-weight:700;
+  color:var(--green-dark); line-height:1.3;
+}
+.pay-qr-wrap {
+  background:#fff; border-radius:var(--radius); padding:18px;
+  text-align:center; margin:4px 0 12px; border:1px solid var(--border-light);
+}
+.pay-qr-wrap img { width:200px; height:200px; object-fit:contain; display:block; margin:0 auto; }
+.pay-qr-tip { font-size:11px; color:var(--text-secondary); margin-top:10px; letter-spacing:.5px; }
+.pay-summary {
+  font-size:11px; color:var(--text-secondary); padding:10px 0;
+  border-top:1px solid var(--border-light); line-height:1.7; max-height:120px; overflow-y:auto;
+}
+.pay-note { text-align:center; font-size:10px; color:var(--text-muted); margin-top:10px; letter-spacing:.5px; }
 </style>
 </head>
 <body>
@@ -972,6 +1000,7 @@ body {
     </div>
   </div>
   <div class="scroll-hint">
+    <span>向下探索</span>
     <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
   </div>
 </div>
@@ -1046,10 +1075,27 @@ body {
 </div>
 
 <div class="bottom-pad"></div>
+
+<!-- Payment Modal -->
+<div class="modal-overlay" id="payModal">
+  <div class="modal-sheet">
+    <div class="modal-title"><span>扫码付款</span><button class="modal-close" onclick="closePay()">&#10005;</button></div>
+    <div class="pay-amount">
+      <div class="label">应付金额</div>
+      <div class="val" id="payAmount">¥0.00</div>
+    </div>
+    <div class="pay-qr-wrap">
+      <img id="payQR" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23f8f7f4' width='200' height='200' rx='12'/%3E%3Crect x='20' y='20' width='160' height='160' rx='8' fill='none' stroke='%23d0cdc5' stroke-width='2' stroke-dasharray='6,4'/%3E%3Ctext x='100' y='80' text-anchor='middle' fill='%23bfbbb0' font-size='36'%3E📷%3C/text%3E%3Ctext x='100' y='115' text-anchor='middle' fill='%23bfbbb0' font-size='13' font-family='sans-serif'%3E微信收款码%3C/text%3E%3Ctext x='100' y='140' text-anchor='middle' fill='%23d5d2ca' font-size='10' font-family='sans-serif'%3E替换为实际二维码%3C/text%3E%3C/svg%3E" alt="微信收款码">
+      <div class="pay-qr-tip">📱 打开微信扫一扫付款</div>
+    </div>
+    <div class="pay-summary" id="paySummary"></div>
+    <button class="btn-add" onclick="confirmPay()">✅ 已完成支付</button>
+    <div class="pay-note">付款后请点击上方按钮确认</div>
+  </div>
+</div>
 </div>
 
 <script>
-const PUSHPLUS_TOKEN='6bbe32ec284b40d3a8e35bb5da15c3e8';
 const menu=[{
   cat:'经典奶茶',
   items:[
@@ -1212,23 +1258,41 @@ function closeCart(){document.getElementById('cartModal').classList.remove('show
 function checkout(){
   if(cart.length===0){showToast('购物车是空的');return}
   const t=cartTotal();
-  showToast('下单成功，共 ¥'+t.toFixed(2));
+  const orderNo='LT'+Date.now().toString(36).toUpperCase();
+  document.getElementById('payAmount').textContent='¥'+t.toFixed(2);
+  document.getElementById('paySummary').innerHTML=
+    '<div style="margin-bottom:4px">订单编号：<b>'+orderNo+'</b></div>'+
+    cart.map((x,i)=>
+    '<div>'+x.emoji+' <b>'+(i+1)+'. '+x.name+'</b> — '+x.sweet+' / '+x.ice+' — ¥'+(x.price*x.qty).toFixed(2)+'</div>'
+  ).join('');
+  document.getElementById('payModal').classList.add('show');
+  closeCart();
 
   // PushPlus 微信通知
   fetch('https://www.pushplus.plus/send',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({
-      token:PUSHPLUS_TOKEN,
+      token:'6bbe32ec284b40d3a8e35bb5da15c3e8',
       title:'柠家小铺 · 新订单',
-      content:'<html><head><meta charset="utf-8"/></head><body><h3>订单详情</h3>'
+      content:'<html><head><meta charset="utf-8"/></head><body><h3>订单详情</h3>'+
         cart.map((x,i)=>'<p><b>'+(i+1)+'. '+x.name+'</b><br/>'+x.sweet+' / '+x.ice+' · ¥'+(x.price*x.qty).toFixed(2)+'</p>').join('')+
         '<hr/><p style="font-size:18px;color:#2d5016"><b>合计：¥'+t.toFixed(2)+'</b></p><p>🕐 '+new Date().toLocaleString()+'</p></body></html>',
       template:'html'
     })
   }).catch(()=>{});
+}
 
-  cart=[];updateCartUI();closeCart();
+function confirmPay(){
+  if(!confirm('请确认已在微信中完成付款\n\n点击「确定」表示已付款\n点击「取消」返回继续付款'))return;
+  showToast('支付成功，感谢惠顾！');
+  cart=[];updateCartUI();
+  document.getElementById('payModal').classList.remove('show');
+}
+
+function closePay(){
+  if(cart.length>0&&!confirm('确定关闭付款窗口吗？\n\n关闭后购物车不会被清空\n可稍后重新下单付款'))return;
+  document.getElementById('payModal').classList.remove('show');
 }
 
 function switchCat(i){activeCat=i;renderAll();setTimeout(()=>{const el=document.getElementById('cat-'+i);if(el)el.scrollIntoView({behavior:'smooth'})},50)}
@@ -1279,7 +1343,7 @@ function populateHeroGrid(){
   const all=[];
   menu.forEach((c,ci)=>{c.items.forEach((item,ii)=>{all.push({ci,ii,item})})});
   for(let i=all.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[all[i],all[j]]=[all[j],all[i]]}
-  const picked=all.slice(0,12);
+  const picked=all.slice(0,9);
 
   function cellHtml(p){
     const bg=catGradients[p.ci]||catGradients[0];
@@ -1297,7 +1361,7 @@ function populateHeroGrid(){
 
   ['track1','track2','track3'].forEach((tid,i)=>{
     const row=rows[i];
-    // 4 original × 4 copies = 16 cells to fill the track, no gaps
+    // 3 original × 4 copies = 12 cells to fill the track, no gaps
     const cells=[...row,...row,...row,...row].map(cellHtml).join('');
     document.getElementById(tid).innerHTML=cells;
   });
