@@ -1019,7 +1019,7 @@ body {
     <div class="hero-intro">三年前，我们在街角开张
 只为一杯好柠檬，爆打三十次，每一口都认真</div>
 	    <div class="hero-pill">💡 新鲜手打 · 维C满满 · 5 元起</div>
-    <div class="hero-badges">🧊 手工现做 · 🍋 当日鲜柠 · 🚀 即点即送</div>
+    <div class="hero-badges">🧊 手工现做 · 🍋 当日鲜柠 · 🍃 新鲜爆打</div>
   </div>
   <div class="hero-stats">累计售出 12,600+ 杯 · 回头率 89%</div>
   <div class="hero-grid">
@@ -1054,7 +1054,7 @@ body {
   <div class="hi">香水柠檬</div>
   <div class="hi">手工爆打</div>
   <div class="hi">当日鲜制</div>
-  <div class="hi">即点即送</div>
+  <div class="hi">新鲜好喝</div>
 </div>
 
 <div class="cats" id="cats"></div>
@@ -1096,7 +1096,7 @@ body {
   </div>
 </div>
 
-<div class="trust-bar">🛵 鲜柠现打 · 即点即做 · 每一口都认真</div>
+<div class="trust-bar">🍋 现点现打，新鲜看得见</div>
 
 <div class="bar">
   <div class="badge-wrap" onclick="openCart()">
@@ -1107,7 +1107,7 @@ body {
     <div class="btotal-label">预估金额</div>
     <div class="btotal-val" id="btotal">¥0.00</div>
   </div>
-  <button class="btn-checkout" onclick="checkout()">立即下单</button>
+  <button class="btn-checkout" onclick="checkout()">去付款</button>
 </div>
 
 <div class="bottom-pad"></div>
@@ -1328,7 +1328,7 @@ function confirmPay(){
 }
 
 function closePay(){
-  if(cart.length>0&&!confirm('确定关闭付款窗口吗？\n\n关闭后购物车不会被清空\n可稍后重新下单付款'))return;
+  if(cart.length>0&&!confirm('确定关闭付款窗口吗？\n\n关闭后购物车不会被清空\n可稍后重新购买付款'))return;
   document.getElementById('payModal').classList.remove('show');
 }
 
