@@ -1061,6 +1061,14 @@ body {
     <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
   </div>
 </div>
+<div class="feat-wrap" id="featWrap">
+  <div class="feat-header">
+    <span class="feat-title">推荐专区</span>
+    <span class="feat-tab active" onclick="switchFeatTab(0)">为你推荐</span>
+    <span class="feat-tab" onclick="switchFeatTab(1)">新品尝鲜</span>
+  </div>
+  <div class="feat-scroll" id="featScroll"></div>
+</div>
 
 <div class="header" id="header">
   <button class="fav-btn" id="favBtn" onclick="toggleFav()">🤍</button>
@@ -1081,14 +1089,6 @@ body {
 </div>
 
 <div class="cats" id="cats"></div>
-<div class="feat-wrap" id="featWrap">
-  <div class="feat-header">
-    <span class="feat-title">推荐专区</span>
-    <span class="feat-tab active" onclick="switchFeatTab(0)">为你推荐</span>
-    <span class="feat-tab" onclick="switchFeatTab(1)">新品尝鲜</span>
-  </div>
-  <div class="feat-scroll" id="featScroll"></div>
-</div>
 <div class="plist" id="plist"></div>
 
 <div class="toast" id="toast"></div>
